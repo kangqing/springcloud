@@ -8,6 +8,7 @@ spring:
         server-addr: 127.0.0.1:8848
         file-extension: yaml # #dataId由应用名称(name)加文件扩展名组成 nacos-config.yaml, 默认值为 properties
         group: DEFAULT_GROUP # 默认分组
+        prefix: ${spring.application.name} # 前缀默认就是应用名称，不用配置，这里配置出来方便理解
 
 
 server:
