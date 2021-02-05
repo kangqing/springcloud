@@ -1,6 +1,5 @@
 package com.kangqing.nacosclientcommon;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -17,15 +16,18 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+/**
+ * 四种方式调用服务接口
+ */
 @Slf4j
 @RestController
-@RequiredArgsConstructor
 @EnableFeignClients
 @EnableDiscoveryClient
 @SpringBootApplication
 public class NacosClientCommonApplication {
 
-    private final LoadBalancerClient loadBalancerClient;
+    @Autowired
+    private LoadBalancerClient loadBalancerClient;
 
     // 需要@Autowired注入
     @Autowired
