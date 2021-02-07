@@ -8,10 +8,10 @@ spring:
     nacos:
       config:
         server-addr: 127.0.0.1:8848
+        namespace: 87d915fc-e1be-4d0e-8dbd-d3314ac47844  # nacos多环境方式3 （推荐）命名空间可以配置在启动环境中，比较灵活
         file-extension: yaml # #dataId由应用名称(name)加文件扩展名组成 nacos-config.yaml, 默认值为 properties
         group: DEFAULT_GROUP # 默认分组, nacos多环境配置 方式2，例如 DEV-GROUP  TEST-GROUP
         prefix: ${spring.application.name} # 前缀默认就是应用名称，不用配置，这里配置出来方便理解
-        namespace: 87d915fc-e1be-4d0e-8dbd-d3314ac47844  # nacos多环境方式3 （推荐）命名空间可以配置在启动环境中，比较灵活
 
 
 server:

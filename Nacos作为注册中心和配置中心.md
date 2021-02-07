@@ -209,5 +209,144 @@ public interface FeignService {
 }
 ```
 
+## Nacos作为配置中心
+
+### 创建命名空间
+
+首先需要在Nacos中新增两个命名空间，`dev` 和 `test`之后在每个命名空间下添加对应的配置。
+
+![图2](https://yunqing-img.oss-cn-beijing.aliyuncs.com/hexo/article/202102/image-20210207093226135.png)
+
+如图所示还有一个保留空间`public`这是默认存在的,接下来在`配置管理`的`配置列表`中就可以看到三个命名空间，如下图所示，我在`dev`命名空间创建了一个配置。
+
+![图3](https://yunqing-img.oss-cn-beijing.aliyuncs.com/hexo/article/202102/image-20210207093630848.png)
+
+### 如何定位一个配置
+
+1. 首先由`命名空间namespace`定位是哪个命名空间的配置，必须使用命名空间id，不配置默认使用`public`命名空间
+2. `前缀prefix`确定了配置的名称，不配置默认为当前服务名称，这里我配置的也是当前服务名称
+3. `后缀file-extension`确定了配置的后缀名，默认为`properties`,因为我的配置的`Data Id`创建为`yaml`格式的名为`nacos-config.yaml`所以这里的后缀需要写出为`yaml`
+4. `分组group`确定了配置的组名，默认组名为`DEFAULT_GROUP`
+5. 也可以通过`spring.profile.active`或者`group`进行多环境配置，但是更推荐使用`namespace`
 
 
+
+- bootstrap.yml
+
+```yaml
+# 此处配置必须用 bootstrap.yml 或者 bootstrap.properties
+spring:
+  application:
+    name: nacos-config
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        file-extension: yaml # dataId由应用名称(name)加文件扩展名组成 nacos-config.yaml, 默认值为 properties
+        group: DEFAULT_GROUP # 默认分组, 例如 DEV-GROUP  TEST-GROUP
+        prefix: ${spring.application.name} # 前缀默认就是应用名称，不用配置，这里配置出来方便理解
+        namespace: 87d915fc-e1be-4d0e-8dbd-d3314ac47844  # 命名空间
+
+
+server:
+  port: 7007
+```
+
+### 到底配置了什么？
+
+实际上就配置了一个`kangqing.title`
+
+![图4](https://yunqing-img.oss-cn-beijing.aliyuncs.com/hexo/article/202102/image-20210207095209149.png)
+
+
+
+### 读取配置详情
+
+读取配置的目的是证明，通过配置中心添加的配置，能够在应用中生效，被读取到即能够生效
+
+```xml
+<!-- 这个是配置中心的依赖 -->
+<dependency>
+    <groupId>com.alibaba.cloud</groupId>
+    <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+    <version>2.2.5.RELEASE</version>
+</dependency>
+```
+
+```java
+/**
+ * 可以看到，这个例子中并没有加入nacos的服务发现模块，所以这两个内容是完全可以独立使用的
+ *
+ * 这个注解 @RefreshScope 主要用来让这个类下的配置内容支持动态刷新，也就是当我们的应用启动之后，修
+ * 改了Nacos中的配置内容之后，这里也会马上生效。
+ */
+@RefreshScope
+@RestController
+@SpringBootApplication
+public class NacosConfigApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(NacosConfigApplication.class, args);
+    }
+
+    /**
+     * 注意这个冒号不能省略
+     */
+    @Value("${kangqing.title:}")
+    private String title;
+
+    @GetMapping("/test")
+    public String hello() {
+        return "result -> " + title;
+    }
+
+}
+```
+
+### 多配置加载
+
+例如我现在已经加载了`nacos-config.yaml`的配置，我不想把所有配置写到这一个文件中，于是我又在nacos中添加了`mybatis-plus.yaml`的配置，想要在应用中加载多个配置
+
+#### 方式一：
+
+```yaml
+spring:
+  application:
+    name: nacos-config
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: 535d5ae5-de1e-443b-a0a7-68a34e52946d
+        ext_config[0]:
+          data-id: nacos-config.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+        ext_config[1]:
+          data-id: mybatis-plus.yaml
+          group: DEFAULT_GROUP
+          refresh: true
+```
+
+#### 方式二：
+
+```yaml
+spring:
+  application:
+    name: nacos-config
+  cloud:
+    nacos:
+      config:
+        server-addr: 127.0.0.1:8848
+        namespace: 535d5ae5-de1e-443b-a0a7-68a34e52946d
+        shared-configs:
+          - nacos-config.yaml
+          - mybatis-plus.yaml
+        refresh-enabled: true
+```
+
+既然有多种配置方式，就存在优先级，最先的前缀后缀group定位的方式优先级最高，其次是方式一，最后是方式二，也就是方式二会被方式一覆盖，方式一会被前后缀group的方式覆盖。
+
+
+
+- 注：以上知识点均是本人基于单机版的nacos进行学习总结，并不适用于生产环境，生产环境请另行部署nacos集群和nacos数据持久化。

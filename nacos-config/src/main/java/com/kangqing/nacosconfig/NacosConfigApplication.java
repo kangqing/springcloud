@@ -28,9 +28,12 @@ public class NacosConfigApplication {
     @Value("${kangqing.title:}")
     private String title;
 
+    @Value("${kangqing.mybatis:}")
+    private String mybatis;
+
     @GetMapping("/test")
     public String hello() {
-        return "result -> " + title;
+        return "title -> " + title + "\nmybatis -> " + mybatis;
     }
 
 }
