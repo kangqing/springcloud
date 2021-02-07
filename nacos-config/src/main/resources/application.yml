@@ -1,0 +1,13 @@
+# 配置sentinel 仪表板的访问地址
+spring:
+  cloud:
+    sentinel:
+      transport:
+        dashboard: 172.26.104.107:7010
+      datasource:
+        ds:
+          nacos:
+            serverAddr: 127.0.0.1:8848
+            dataId: nacos-config-sentinel
+            groupId: DEFAULT_GROUP
+            ruleType: flow
