@@ -3,7 +3,7 @@ spring:
   cloud:
     sentinel:
       transport:
-        dashboard: 172.26.104.107:7010
+        dashboard: 172.26.104.107:8080
       datasource:
         ds:
           nacos:
@@ -11,3 +11,4 @@ spring:
             dataId: nacos-config-sentinel
             groupId: DEFAULT_GROUP
             ruleType: flow
+            namespace: 7f62adf0-e97f-4844-9259-36886d2f9949
