@@ -3,72 +3,77 @@ server:
 service-url:
   nacos-config: http://localhost:7007
 spring:
+  application:
+    name: api-gateway
   cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
     gateway:
       routes:
         - id: path_route #路由的ID，只有发送指定路径的方法才能匹配该路由
           uri: ${service-url.nacos-config}/config/{id} #匹配后路由地址
           predicates: # 断言，路径相匹配的进行路由
             - Path=/config/{id}
-        - id: after_route # 指定时间之后路由
-          uri: ${service-url.nacos-config}
-          predicates:
-            - After=2021-02-23T16:30:00+08:00[Asia/Shanghai]
-        - id: before_route # 指定时间之前路由
-          uri: ${service-url.nacos-config}
-          predicates:
-            - Before=2021-02-24T16:30:00+08:00[Asia/Shanghai]
-        - id: between_route # 指定时间之间路由
-            uri: ${service-url.nacos-config}
-            predicates:
-              - Between=2019-09-24T16:30:00+08:00[Asia/Shanghai], 2019-09-25T16:30:00+08:00[Asia/Shanghai]
-        - id: cookie_route # 带指定cookie才能匹配该路由 curl http://localhost:7013/config/1 --cookie "username=kangqing"
-            uri: ${service-url.nacos-config}
-            predicates:
-              - Cookie=username,kangqing
-        - id: header_route # 带指定请求头才能匹配 curl http://localhost:7013/config/1 -H "X-Request-Id:123"
-            uri: ${service-url.nacos-config}
-            predicates:
-              - Header=X-Request-Id, \d+
-        - id: host_route # 带指定host才能匹配 curl http://localhost:7013/config/1 -H "Host:www.yunqing.xyz"
-            uri: ${service-url.nacos-config}
-            predicates:
-              - Host=**.yunqing.xyz
-        - id: method_route # 只有 get 方法匹配该路由,如后面的 POST 方法不可以  curl -X POST http://localhost:7013/config/1
-            uri: ${service-url.nacos-config}
-            predicates:
-              - Method=GET
-        - id: query_route # 带指定查询参数才能匹配该路由
-            uri: ${service-url.nacos-config}/config/getByUsername
-            predicates:
-              - Query=username
-        - id: remoteaddr_route # 从指定远程地址发送的请求才能匹配该路由
-            uri: ${service-url.nacos-config}
-            predicates:
-              - RemoteAddr=192.168.1.1/24
-        - id: weight_high # 指定权重，80%被路由到8201   20%被路由到8202
-            uri: http://localhost:8201
-            predicates:
-              - Weight=group1, 8
-              - id: weight_low
-                uri: http://localhost:8202
-                predicates:
-                  - Weight=group1, 2
-        - id: add_request_parameter_route # 给请求增加参数，127.0.0.1:7013会被路由到127.0.0.1:8201并给Get请求加上对应的参数
-            uri: http://localhost:8201
-            filters:
-              - AddRequestParameter=username, kangqing
-            predicates:
-              - Method=GET
-        - id: strip_prefix_route # 对指定路径前缀进行去除 127.0.0.1:7013/config/a/b/1会被路由到127.0.0.1:8201/b/1
-            uri: http://localhost:8201
-            predicates:
-              - Path=/config/**
-            filters:
-              - StripPrefix=2
-        - id: prefix_path_route # 给所有get 请求添加前缀config
-            uri: http://localhost:8201
-            predicates:
-              - Method=GET
-            filters:
-              - PrefixPath=/config
+#        - id: after_route # 指定时间之后路由
+#          uri: ${service-url.nacos-config}
+#          predicates:
+#            - After=2021-02-23T16:30:00+08:00[Asia/Shanghai]
+#        - id: before_route # 指定时间之前路由
+#          uri: ${service-url.nacos-config}
+#          predicates:
+#            - Before=2021-02-24T16:30:00+08:00[Asia/Shanghai]
+#        - id: between_route # 指定时间之间路由
+#            uri: ${service-url.nacos-config}
+#            predicates:
+#              - Between=2019-09-24T16:30:00+08:00[Asia/Shanghai], 2019-09-25T16:30:00+08:00[Asia/Shanghai]
+#        - id: cookie_route # 带指定cookie才能匹配该路由 curl http://localhost:7013/config/1 --cookie "username=kangqing"
+#            uri: ${service-url.nacos-config}
+#            predicates:
+#              - Cookie=username,kangqing
+#        - id: header_route # 带指定请求头才能匹配 curl http://localhost:7013/config/1 -H "X-Request-Id:123"
+#            uri: ${service-url.nacos-config}
+#            predicates:
+#              - Header=X-Request-Id, \d+
+#        - id: host_route # 带指定host才能匹配 curl http://localhost:7013/config/1 -H "Host:www.yunqing.xyz"
+#            uri: ${service-url.nacos-config}
+#            predicates:
+#              - Host=**.yunqing.xyz
+#        - id: method_route # 只有 get 方法匹配该路由,如后面的 POST 方法不可以  curl -X POST http://localhost:7013/config/1
+#            uri: ${service-url.nacos-config}
+#            predicates:
+#              - Method=GET
+#        - id: query_route # 带指定查询参数才能匹配该路由
+#            uri: ${service-url.nacos-config}/config/getByUsername
+#            predicates:
+#              - Query=username
+#        - id: remoteaddr_route # 从指定远程地址发送的请求才能匹配该路由
+#            uri: ${service-url.nacos-config}
+#            predicates:
+#              - RemoteAddr=192.168.1.1/24
+#        - id: weight_high # 指定权重，80%被路由到8201   20%被路由到8202
+#            uri: http://localhost:8201
+#            predicates:
+#              - Weight=group1, 8
+#              - id: weight_low
+#                uri: http://localhost:8202
+#                predicates:
+#                  - Weight=group1, 2
+#        - id: add_request_parameter_route # 给请求增加参数，127.0.0.1:7013会被路由到127.0.0.1:8201并给Get请求加上对应的参数
+#            uri: http://localhost:8201
+#            filters:
+#              - AddRequestParameter=username, kangqing
+#            predicates:
+#              - Method=GET
+#        - id: strip_prefix_route # 对指定路径前缀进行去除 127.0.0.1:7013/config/a/b/1会被路由到127.0.0.1:8201/b/1
+#            uri: http://localhost:8201
+#            predicates:
+#              - Path=/config/**
+#            filters:
+#              - StripPrefix=2
+#        - id: prefix_path_route # 给所有get 请求添加前缀config
+#            uri: http://localhost:8201
+#            predicates:
+#              - Method=GET
+#            filters:
+#              - PrefixPath=/config

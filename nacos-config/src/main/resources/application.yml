@@ -1,6 +1,9 @@
 # 配置sentinel 仪表板的访问地址
 spring:
   cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
     sentinel:
       transport:
         dashboard: 172.26.104.107:8080

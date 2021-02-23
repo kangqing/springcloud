@@ -1,9 +1,8 @@
 server:
-  port: 7001
-
+  port: 7016
 spring:
   application:
-    name: nacos-server
+    name: admin-server
   cloud:
     nacos:
       discovery:
