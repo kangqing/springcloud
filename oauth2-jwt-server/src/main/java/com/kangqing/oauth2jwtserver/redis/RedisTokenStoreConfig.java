@@ -21,8 +21,9 @@ public class RedisTokenStoreConfig {
 
     private final RedisConnectionFactory redisConnectionFactory;
 
+    /* 使用了 jwtTokenStore
     @Bean
-    public TokenStore redisTokenStore (){
+    public TokenStore redisTokenStore() {
         return new RedisTokenStore(redisConnectionFactory);
-    }
+    }*/
 }
