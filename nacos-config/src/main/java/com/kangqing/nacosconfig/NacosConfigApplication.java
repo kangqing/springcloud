@@ -23,12 +23,12 @@ public class NacosConfigApplication {
     }
 
     /**
-     * 注意这个冒号不能省略
+     * 注意这个冒号后面是自定义值，如果找不到这个配置，冒号后面写啥是啥
      */
     @Value("${kangqing.title:}")
     private String title;
 
-    @Value("${kangqing.mybatis:}")
+    @Value("${kangqing.mybatis:defaultValue}")
     private String mybatis;
 
     @GetMapping("/test")
