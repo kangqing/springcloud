@@ -1,0 +1,5 @@
+server:
+  port: 7021
+spring:
+  application:
+    name: oauth2-server
