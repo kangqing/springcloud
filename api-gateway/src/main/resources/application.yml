@@ -1,0 +1,12 @@
+server:
+  port: 7013
+service-url:
+  nacos-config: http://localhost:7007
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: path_route #路由的ID
+          uri: ${service-url.nacos-config}/config/{id} #匹配后路由地址
+          predicates: # 断言，路径相匹配的进行路由
+            - Path=/config/{id}
