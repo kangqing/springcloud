@@ -6,7 +6,7 @@ spring:
   boot:
     admin:
       client:
-        url: http://localhost:7016 #配置到 admin-server 地址，让admin-server对admin-client进行监控
+        url: http://127.0.0.1:7016 #配置到 admin-server 地址，让admin-server对admin-client进行监控
   cloud:
     nacos:
       discovery:
