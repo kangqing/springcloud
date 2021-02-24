@@ -20,3 +20,13 @@ management:
     web:
       exposure:
         include: "*"
+
+# 自定义授权的应用
+kq:
+  oauth2:
+    clients[0]: # 第一个应用，要是有多个clients[1]、clients[2]等等
+      clientId: client-app
+      clientSecret: 123456
+      accessTokenValiditySeconds: 7200
+      authorizedGrantTypes: refresh_token,password # authorization_code,
+      scopes: all,read,write

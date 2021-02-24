@@ -41,7 +41,8 @@ public class UserServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        List<UserDTO> findUserList = userList.stream().filter(item -> item.getUsername().equals(s)).collect(Collectors.toList());
+        List<UserDTO> findUserList = userList.stream().filter(item -> item.getUsername().equals(s))
+                .collect(Collectors.toList());
         if (CollUtil.isEmpty(findUserList)) {
             throw new UsernameNotFoundException(MessageConstant.USERNAME_PASSWORD_ERROR.getMsg());
         }
