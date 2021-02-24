@@ -39,11 +39,11 @@
             <artifactId>spring-cloud-starter-gateway</artifactId>
         </dependency>
         <!--jwt库，主要使用对称加密（HMAC）和非对称加密（RSA）两种算法来生成和解析JWT令牌。-->
-        <dependency>
+        <!--<dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
             <version>8.19</version>
-        </dependency>
+        </dependency>-->
         <!--需要在每一个需要监控的服务中加上这个监控检测，不然 Spring Boot Admin 检测不到-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -65,6 +65,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+        <!--
+            包含Spring Security对JOSE（Javascript对象签名和加密）框架的支持。框架旨在提供安全地传输双方之间的权利要求的方法。
+            它由一系列规范构建：
+            JSON Web令牌（JWT）
+            JSON Web签名（JWS）
+            JSON Web加密（JWE）
+            JSON Web密钥（JWK）
+            包括 nimbus-jose-jwt 这个 jwt 库
+        -->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-jose</artifactId>
