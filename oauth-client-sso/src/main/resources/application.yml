@@ -1,0 +1,24 @@
+server:
+  port: 7025
+  servlet:
+    session:
+      cookie:
+        name: OAUTH2-CLIENT-SSO-SESSIONID # 防止 Cookie 冲突，冲突会导致登录验证不通过
+
+# 自定义配置的oauth2 认证服务器的地址
+oauth2-server-url: http://localhost:7023
+
+spring:
+  application:
+    name: oauth2-client-sso
+
+security:
+  oauth2: # 与 oauth2-jwt-server 对应的配置
+    client:
+      client-id: admin
+      client-secret: admin123456
+      user-authorization-uri: ${oauth2-server-url}/oauth/authorize
+      access-token-uri: ${oauth2-server-url}/oauth/token
+    resource:
+      jwt:
+        key-uri: ${oauth2-server-url}/oauth/token_key

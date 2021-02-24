@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.config.annotation.configurers.ClientD
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -62,6 +63,8 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .accessTokenConverter(jwtAccessTokenConverter)
                 .tokenEnhancer(enhancerChain);
     }
+
+
     /**
      * 使用密码模式需要配置
      */
@@ -88,8 +91,19 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret(passwordEncoder.encode("admin123456"))//配置client_secret
                 .accessTokenValiditySeconds(3600)//配置访问token的有效期
                 .refreshTokenValiditySeconds(864000)//配置刷新token的有效期
-                .redirectUris("http://www.baidu.com")//配置redirect_uri，用于授权成功后跳转
+//                .redirectUris("http://www.baidu.com")//配置redirect_uri，用于授权成功后跳转
+                .redirectUris("http://127.0.0.1:7025/login") //单点登录时配置
+                .autoApprove(true) //单点登录时候 自动授权配置
                 .scopes("all")//配置申请的权限范围
                 .authorizedGrantTypes("authorization_code", "password", "refresh_token");//配置grant_type，表示授权类型
+    }
+
+    /**
+     * 获取密钥需要身份认证，使用单点登录时必须配置
+     * @param security
+     */
+    @Override
+    public void configure(AuthorizationServerSecurityConfigurer security) {
+        security.tokenKeyAccess("isAuthenticated()");
     }
 }
