@@ -22,7 +22,7 @@ public class Oauth2JwtServerApplication {
     }
 
     @GetMapping("/getCurrentUser")
-    public Object getCurrentUser(Authentication authentication, HttpServletRequest request) {
+    public Object getCurrentUser(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
         String token = StrUtil.subAfter(header, "bearer ", false);
         return Jwts.parser()
