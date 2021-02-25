@@ -1,4 +1,4 @@
-package com.kangqing.kqoauth2clientgateway;
+package com.kangqing.kqoauth2clientgateway.filter;
 
 import cn.hutool.core.util.StrUtil;
 import com.nimbusds.jose.JWSObject;

@@ -1,7 +1,7 @@
-package com.kangqing.kqoauth2clientgateway;
+package com.kangqing.kqoauth2clientgateway.filter;
 
+import com.kangqing.kqoauth2clientgateway.config.IgnoreUrlsConfig;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;

@@ -2,7 +2,7 @@ package com.kangqing.kqoauth2clientgateway.resource;
 
 import cn.hutool.core.util.ArrayUtil;
 import com.kangqing.kqoauth2clientgateway.AuthorizationManager;
-import com.kangqing.kqoauth2clientgateway.IgnoreUrlsConfig;
+import com.kangqing.kqoauth2clientgateway.config.IgnoreUrlsConfig;
 import com.kangqing.kqoauth2clientgateway.RestAuthenticationEntryPoint;
 import com.kangqing.kqoauth2clientgateway.RestfulAccessDeniedHandler;
 import lombok.RequiredArgsConstructor;

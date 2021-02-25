@@ -37,8 +37,19 @@ spring:
     port: 6379
     host: 127.0.0.1
     password:
+
 secure:
   ignore:
     urls: #配置白名单路径
+      - "/doc.html"
+      - "/swagger-resources/**"
+      - "/swagger/**"
+      - "/**/v2/api-docs"
+      - "/**/*.js"
+      - "/**/*.css"
+      - "/**/*.png"
+      - "/**/*.ico"
+      - "/webjars/springfox-swagger-ui/**"
       - "/actuator/**"
       - "/auth/oauth/token"
+      - "/auth/rsa/publicKey"

@@ -1,6 +1,5 @@
 package com.kangqing.kqoauth2authenticationserver.oauth2;
 
-import com.kangqing.kqoauth2authenticationserver.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;

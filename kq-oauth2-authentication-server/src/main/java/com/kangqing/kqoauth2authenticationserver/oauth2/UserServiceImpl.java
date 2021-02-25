@@ -1,7 +1,8 @@
-package com.kangqing.kqoauth2authenticationserver.user;
+package com.kangqing.kqoauth2authenticationserver.oauth2;
 
 import cn.hutool.core.collection.CollUtil;
 import com.kangqing.kqoauth2authenticationserver.constant.MessageConstant;
+import com.kangqing.kqoauth2authenticationserver.user.dto.SecurityUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +33,9 @@ public class UserServiceImpl implements UserDetailsService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final HttpServletRequest request;
+
+
     @PostConstruct
     public void initData() {
         String password = passwordEncoder.encode("123456");
@@ -43,9 +48,20 @@ public class UserServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         List<UserDTO> findUserList = userList.stream().filter(item -> item.getUsername().equals(s))
                 .collect(Collectors.toList());
-        if (CollUtil.isEmpty(findUserList)) {
+        /**
+         * 根据应用 clientId 获取不同的用户信息
+        String clientId = request.getParameter("client_id");
+        UserDTO userDto;
+        if(AuthConstant.ADMIN_CLIENT_ID.equals(clientId)){
+            userDto = adminService.loadUserByUsername(username);
+        }else{
+            userDto = memberService.loadUserByUsername(username);
+        }*/
+        /*if (CollUtil.isEmpty(findUserList)) {
             throw new UsernameNotFoundException(MessageConstant.USERNAME_PASSWORD_ERROR.getMsg());
-        }
+        }*/
+        //userDto.setClientId(clientId);
+        //SecurityUser securityUser = new SecurityUser(userDto);
         SecurityUser securityUser = new SecurityUser(findUserList.get(0));
         if (!securityUser.isEnabled()) {
             throw new DisabledException(MessageConstant.ACCOUNT_DISABLED.getMsg());

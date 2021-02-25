@@ -1,5 +1,6 @@
 server:
   port: 7027
+
 spring:
   profiles:
     active: dev
@@ -9,12 +10,33 @@ spring:
     nacos:
       discovery:
         server-addr: 127.0.0.1:8848
+  # 时间格式化
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
   redis:
     database: 0
     host: 127.0.0.1
     port: 6379
+    password:
+    # 连接超时时间（记得添加单位，Duration）
+    timeout: 10000ms
+    # Redis默认情况下有16个分片，这里配置具体使用的分片
+    # database: 0
+    lettuce:
+      pool:
+        # 连接池最大连接数（使用负值表示没有限制） 默认 8
+        max-active: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制） 默认 -1
+        max-wait: -1ms
+        # 连接池中的最大空闲连接 默认 8
+        max-idle: 8
+        # 连接池中的最小空闲连接 默认 0
+        min-idle: 0
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/mall?useUnicode=true&characterEncoding=UTF-8&useSSL=false&autoReconnect=true&failOverReadOnly=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    username: root
+    password: 5678
+    driver-class-name: com.mysql.cj.jdbc.Driver
 management:
   endpoints:
     web:
@@ -28,5 +50,5 @@ kq:
       clientId: client-app
       clientSecret: 123456
       accessTokenValiditySeconds: 7200
-      authorizedGrantTypes: refresh_token,password # authorization_code,
+      authorizedGrantTypes: refresh_token,password # authorization_code目前允许密码模式和刷新token,不允许授权码模式,
       scopes: all,read,write

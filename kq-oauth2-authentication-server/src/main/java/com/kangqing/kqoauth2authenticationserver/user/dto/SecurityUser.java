@@ -1,5 +1,6 @@
-package com.kangqing.kqoauth2authenticationserver.user;
+package com.kangqing.kqoauth2authenticationserver.user.dto;
 
+import com.kangqing.kqoauth2authenticationserver.oauth2.UserDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

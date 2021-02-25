@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kangqing.kqoauth2authenticationserver.user.dao.MenuResourceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.kangqing.kqoauth2authenticationserver.user.domain.MenuResource">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="name" property="name" />
+        <result column="method" property="method" />
+        <result column="url" property="url" />
+        <result column="icon" property="icon" />
+        <result column="status" property="status" />
+        <result column="type" property="type" />
+        <result column="grades" property="grades" />
+        <result column="seq" property="seq" />
+        <result column="version" property="version" />
+        <result column="del_code" property="delCode" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, parent_id, name, method, url, icon, status, type, grades, seq, version, del_code, create_time, update_time
+    </sql>
+
+</mapper>

@@ -1,4 +1,4 @@
-package com.kangqing.kqoauth2clientgateway;
+package com.kangqing.kqoauth2clientgateway.config;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
