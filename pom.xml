@@ -31,6 +31,8 @@
 
     <modules>
         <module>kq-oauth2-authentication-server</module>
+        <module>kq-oauth2-client-gateway</module>
+        <module>kq-oauth2-api</module>
     </modules>
 
     <dependencies>
