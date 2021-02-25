@@ -1,4 +1,4 @@
-package com.kangqing.kqoauth2authenticationserver.oauth2;
+package com.kangqing.kqoauth2authenticationserver.jwt;
 
 import com.kangqing.kqoauth2authenticationserver.user.dto.SecurityUser;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;

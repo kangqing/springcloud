@@ -16,4 +16,8 @@ public class OAuth2Properties {
      * 给哪些应用授权，可以多个，默认为空
      */
     private OAuth2ClientProperties[] clients = {};
+    /**
+     * token 存在 redis 还是存在 jwt，不配置默认存在 jwt
+     */
+    private String storeType;
 }

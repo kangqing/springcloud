@@ -1,4 +1,4 @@
-package com.kangqing.kqoauth2authenticationserver.config;
+package com.kangqing.kqoauth2authenticationserver.handler;
 
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;

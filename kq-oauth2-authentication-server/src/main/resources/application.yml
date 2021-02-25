@@ -46,6 +46,7 @@ management:
 # 自定义授权的应用
 kq:
   oauth2:
+    storeType: redis # 不配置存在 jwt,可以改成 redis
     clients[0]: # 第一个应用，要是有多个clients[1]、clients[2]等等
       clientId: client-app
       clientSecret: 123456

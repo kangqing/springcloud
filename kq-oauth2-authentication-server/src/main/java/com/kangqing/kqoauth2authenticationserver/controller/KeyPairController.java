@@ -3,6 +3,7 @@ package com.kangqing.kqoauth2authenticationserver.controller;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.RSAKey;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +17,7 @@ import java.util.Map;
  * @since 2021/2/24 11:37
  */
 @RestController
+@ConditionalOnProperty(prefix = "kq.oauth2", name = "storeType", havingValue = "jwt", matchIfMissing = true)
 @RequiredArgsConstructor
 public class KeyPairController {
 

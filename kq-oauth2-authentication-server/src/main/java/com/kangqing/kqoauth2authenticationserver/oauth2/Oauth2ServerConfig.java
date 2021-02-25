@@ -1,11 +1,16 @@
 package com.kangqing.kqoauth2authenticationserver.oauth2;
 
+import com.kangqing.kqoauth2authenticationserver.jwt.JwtTokenEnhancer;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
+import org.aspectj.lang.annotation.RequiredTypes;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.builders.InMemoryClientDetailsServiceBuilder;
@@ -16,7 +21,9 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 import org.springframework.security.rsa.crypto.KeyStoreKeyFactory;
 
 import java.security.KeyPair;
@@ -38,6 +45,10 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     private final AuthenticationManager authenticationManager;
     private final JwtTokenEnhancer jwtTokenEnhancer;
     private final OAuth2Properties oAuth2Properties;
+    private final TokenStore redisTokenStore;
+
+    @Autowired(required = false)
+    private JwtAccessTokenConverter jwtAccessTokenConverter;
 
     /*
     @Override
@@ -76,36 +87,33 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     }
 
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
-        List<TokenEnhancer> delegates = new ArrayList<>();
-        delegates.add(jwtTokenEnhancer);
-        delegates.add(accessTokenConverter());
-        enhancerChain.setTokenEnhancers(delegates); //配置JWT的内容增强器
-        endpoints.authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService) //配置加载用户信息的服务
-                .accessTokenConverter(accessTokenConverter())
-                .tokenEnhancer(enhancerChain);
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+        /**
+         * 默认情况下自己适配
+         * 但是我们这里继承AuthorizationServerConfigurerAdapter 自定义之后，需要手动配置
+         */
+        endpoints
+                .tokenStore(redisTokenStore)
+                .authenticationManager(authenticationManager)
+                .userDetailsService(userDetailsService);
+
+        if (jwtAccessTokenConverter != null && jwtTokenEnhancer != null) {
+            TokenEnhancerChain enhancerChain = new TokenEnhancerChain();
+            List<TokenEnhancer> delegates = new ArrayList<>();
+            delegates.add(jwtTokenEnhancer);
+            delegates.add(jwtAccessTokenConverter);
+            enhancerChain.setTokenEnhancers(delegates); //配置JWT的内容增强器
+            endpoints.authenticationManager(authenticationManager)
+                    .userDetailsService(userDetailsService) //配置加载用户信息的服务
+                    .accessTokenConverter(jwtAccessTokenConverter)
+                    .tokenEnhancer(enhancerChain);
+        }
     }
 
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
+    public void configure(AuthorizationServerSecurityConfigurer security) {
         security.allowFormAuthenticationForClients();
     }
 
-    @Bean
-    public JwtAccessTokenConverter accessTokenConverter() {
-        JwtAccessTokenConverter jwtAccessTokenConverter = new JwtAccessTokenConverter();
-        jwtAccessTokenConverter.setKeyPair(keyPair());
-        return jwtAccessTokenConverter;
-    }
-
-    @Bean
-    public KeyPair keyPair() {
-        //从classpath下的证书中获取秘钥对
-        KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(new ClassPathResource("jwt.jks"),
-                "123456".toCharArray());
-        return keyStoreKeyFactory.getKeyPair("jwt", "123456".toCharArray());
-    }
 
 }
