@@ -28,20 +28,16 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         if (StrUtil.isEmpty(token)) {
             return chain.filter(exchange);
         }
-        if (token.startsWith("Bearer ") || token.startsWith("bearer ")) {
-            // 解析token
-        } else {
-            try {
-                //从token中解析用户信息并设置到Header中去
-                String realToken = token.replace("Bearer ".toLowerCase(), "");
-                JWSObject jwsObject = JWSObject.parse(realToken);
-                String userStr = jwsObject.getPayload().toString();
-                log.info("AuthGlobalFilter.filter() user:{}",userStr);
-                ServerHttpRequest request = exchange.getRequest().mutate().header("user", userStr).build();
-                exchange = exchange.mutate().request(request).build();
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+        try {
+            //从token中解析用户信息并设置到Header中去
+            String realToken = token.replace("Bearer ".toLowerCase(), "");
+            JWSObject jwsObject = JWSObject.parse(realToken);
+            String userStr = jwsObject.getPayload().toString();
+            log.info("AuthGlobalFilter.filter() user:{}",userStr);
+            ServerHttpRequest request = exchange.getRequest().mutate().header("user", userStr).build();
+            exchange = exchange.mutate().request(request).build();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         return chain.filter(exchange);
     }

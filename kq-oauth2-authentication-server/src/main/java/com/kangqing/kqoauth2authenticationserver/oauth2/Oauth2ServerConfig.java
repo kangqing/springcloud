@@ -46,9 +46,7 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
     private final JwtTokenEnhancer jwtTokenEnhancer;
     private final OAuth2Properties oAuth2Properties;
     private final TokenStore redisTokenStore;
-
-    @Autowired(required = false)
-    private JwtAccessTokenConverter jwtAccessTokenConverter;
+    private final JwtAccessTokenConverter jwtAccessTokenConverter;
 
     /*
     @Override
@@ -92,10 +90,11 @@ public class Oauth2ServerConfig extends AuthorizationServerConfigurerAdapter {
          * 默认情况下自己适配
          * 但是我们这里继承AuthorizationServerConfigurerAdapter 自定义之后，需要手动配置
          */
+        /* 没配置 redis token 方案
         endpoints
                 .tokenStore(redisTokenStore)
                 .authenticationManager(authenticationManager)
-                .userDetailsService(userDetailsService);
+                .userDetailsService(userDetailsService);*/
 
         if (jwtAccessTokenConverter != null && jwtTokenEnhancer != null) {
             TokenEnhancerChain enhancerChain = new TokenEnhancerChain();

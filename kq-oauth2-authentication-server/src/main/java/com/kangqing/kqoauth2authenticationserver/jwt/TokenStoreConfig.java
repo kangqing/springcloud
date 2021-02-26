@@ -26,18 +26,19 @@ public class TokenStoreConfig {
     private final RedisConnectionFactory redisConnectionFactory;
 
     /**
-     * 只有在找到配置项且值为redis的时候才生效
+     * 只有在找到配置项且值为redis的时候才生效,目前仅支持配置成 jwt
      * @return
      */
-    @Bean
+    /*@Bean
     @ConditionalOnProperty(prefix = "kq.oauth2", name = "storeType", havingValue = "redis")
     public TokenStore redisTokenStore(){
         return new RedisTokenStore(redisConnectionFactory);
-    }
+    }*/
 
     /**
+     * 目前仅支持配置成 jwt
      * 配置Jwt的相关配置
-     * 注解 @ConditionalOnProperty 检查系统配置yunqing.security.oauth2.storeType当值是jwt时候下面生效，
+     * 注解 @ConditionalOnProperty 检查系统配置kq.oauth2.storeType当值是jwt时候下面生效，
      * matchIfMissing 如果没匹配到这个配置项，下面的代码也生效
      */
     @Configuration
